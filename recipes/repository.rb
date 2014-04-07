@@ -33,6 +33,16 @@ maven 'mysql-connector-java' do
   subscribes  :install, "directory[root-dir]", :immediately
 end
 
+directory "classes-alfresco" do
+  path        "#{tomcat_base}/shared/classes/alfresco"
+  owner       tomcat_user
+  group       tomcat_group
+  mode        "0775"
+  subscribes :create, "directory[root-dir]", :immediately
+#  subscribes  :create, "template[deploy-alfresco-global]", :immediately
+#  subscribes  :create, "template[alfresco-global]", :immediately
+end
+
 if !repo_properties_path.nil?
   # Deploy the war file as it is
   ruby_block "deploy-alfresco-global" do
@@ -49,18 +59,11 @@ else
     owner       tomcat_user
     group       tomcat_group
     mode        "0660"
-    subscribes  :create, "directory[root-dir]", :immediately
+    subscribes  :create, "directory[classes-alfresco]", :immediately
   end
 end
 
-directory "classes-alfresco" do
-  path        "#{tomcat_base}/shared/classes/alfresco"
-  owner       tomcat_user
-  group       tomcat_group
-  mode        "0775"
-  subscribes  :create, "template[deploy-alfresco-global]", :immediately
-  subscribes  :create, "template[alfresco-global]", :immediately
-end
+
 
 directory "alfresco-extension" do
   path        "#{tomcat_base}/shared/classes/alfresco/extension"
