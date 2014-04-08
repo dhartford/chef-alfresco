@@ -30,6 +30,7 @@ maven 'mysql-connector-java' do
   group_id    'mysql'
   version     mysql_connector_version
   dest        "#{tomcat_home}/lib/"
+  user        tomcat_user
   subscribes  :install, "directory[root-dir]", :immediately
 end
 
